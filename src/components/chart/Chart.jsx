@@ -1,14 +1,9 @@
 import React from 'react'
 import styled from 'styled-components'
-import {
-  AreaChart,
-  Area,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-} from 'recharts'
+import { AreaChart, Area, XAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
+import { useRecoilValue } from 'recoil'
+import { isDark } from '../../utils/atoms'
+import { darkTheme, defaultTheme } from '../../utils/theme'
 
 // STYLE
 const ChartContainer = styled.div`
@@ -22,7 +17,11 @@ const ChartContainer = styled.div`
   }
 
   .chartGrid {
-    stroke: #e9e7e7;
+    stroke: ${(props) => (props.dark ? '#444' : '#e9e7e7')};
+  }
+
+  .tooltip {
+    background-color: red;
   }
 `
 // Temporal data
@@ -36,8 +35,12 @@ const data = [
 ]
 
 const Chart = ({ aspect, title }) => {
+  const dark = useRecoilValue(isDark)
+
+  const TOOLTIP_COLOR = dark ? darkTheme.textColor : defaultTheme.textColor
+
   return (
-    <ChartContainer>
+    <ChartContainer dark={dark}>
       <div className="title">{title}</div>
       <ResponsiveContainer width="100%" aspect={aspect}>
         <AreaChart
@@ -59,7 +62,11 @@ const Chart = ({ aspect, title }) => {
           </defs>
           <CartesianGrid strokeDasharray="3 3" className="chartGrid" />
           <XAxis dataKey="name" stroke="gray" />
-          <Tooltip />
+          <Tooltip
+            contentStyle={{
+              backgroundColor: TOOLTIP_COLOR,
+            }}
+          />
           <Area
             type="monotone"
             dataKey="Total"

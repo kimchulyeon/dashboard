@@ -1,4 +1,5 @@
 import React from 'react'
+import { useRecoilValue } from 'recoil'
 import styled from 'styled-components'
 import Chart from '../../components/chart/Chart'
 import Featured from '../../components/featured/Featured'
@@ -6,10 +7,15 @@ import Navbar from '../../components/navbar/Navbar'
 import Sidebar from '../../components/sidebar/Sidebar'
 import TableArea from '../../components/tableArea/TableArea'
 import Widget from '../../components/widgets/Widget'
+import { isDark } from '../../utils/atoms'
+import { darkTheme, defaultTheme } from '../../utils/theme'
 
 // STYLE
 const Container = styled.div`
   display: flex;
+  background-color: ${(props) =>
+    props.dark ? darkTheme.backgroundColor : defaultTheme.backgroundColor};
+  color: ${(props) => (props.dark ? darkTheme.textColor : defaultTheme.textColor)};
 `
 const HomeContainer = styled.div`
   flex: 6;
@@ -31,14 +37,16 @@ const ListContainer = styled.div`
 
   .listTitle {
     font-weight: 500;
-    color: gray;
+    color: ${(props) => (props.dark ? defaultTheme.textPointColor : darkTheme.textPointColor)};
     margin-bottom: 15px;
   }
 `
 
 const Home = () => {
+  const dark = useRecoilValue(isDark)
+
   return (
-    <Container>
+    <Container dark={dark}>
       <Sidebar />
       {/* Main Page View */}
       <HomeContainer>
@@ -56,7 +64,7 @@ const Home = () => {
           <Chart title="Last 6 Months (Revenue)" aspect={2 / 1} />
         </ChartsContainer>
 
-        <ListContainer>
+        <ListContainer dark={dark}>
           <div className="listTitle">Latest Transactions</div>
           <TableArea />
         </ListContainer>

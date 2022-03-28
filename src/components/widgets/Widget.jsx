@@ -5,6 +5,9 @@ import PersonOutlineIcon from '@mui/icons-material/PersonOutline'
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
 import MonetizationOnIcon from '@mui/icons-material/MonetizationOn'
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet'
+import { useRecoilValue } from 'recoil'
+import { isDark } from '../../utils/atoms'
+import { darkTheme, defaultTheme } from '../../utils/theme'
 
 // STYLE
 const Cont = styled.div`
@@ -24,18 +27,20 @@ const Left = styled.div`
   .title {
     font-weight: bold;
     font-size: 14px;
-    color: #b4b3b3;
+    color: ${(props) => (props.dark ? darkTheme.textPointColor : defaultTheme.textPointColor)};
   }
 
   .counter {
     font-size: 28px;
     font-weight: 300;
+    color: ${(props) => (props.dark ? darkTheme.textColor : defaultTheme.textColor)};
   }
 
   .link {
     width: max-content;
     font-size: 12px;
     border-bottom: 1px solid gray;
+    color: ${(props) => (props.dark ? darkTheme.textColor : defaultTheme.textColor)};
   }
 `
 const Right = styled.div`
@@ -65,6 +70,8 @@ const Right = styled.div`
 `
 
 const Widget = ({ type }) => {
+  const dark = useRecoilValue(isDark)
+
   let data
 
   const AMOUNT = 100
@@ -130,14 +137,14 @@ const Widget = ({ type }) => {
 
   return (
     <Cont>
-      <Left>
+      <Left dark={dark}>
         <span className="title">{data.title}</span>
         <span className="counter">
           {data.isMoney && '$'} {AMOUNT}
         </span>
         <span className="link">{data.link}</span>
       </Left>
-      <Right>
+      <Right dark={dark}>
         <div className="percentage positive">
           <KeyboardArrowUpIcon />
           {DIFF}%

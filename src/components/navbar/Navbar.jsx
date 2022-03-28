@@ -7,6 +7,10 @@ import FullscreenExitIcon from '@mui/icons-material/FullscreenExit'
 import NotificationImportantIcon from '@mui/icons-material/NotificationImportant'
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted'
 import ChatBubbleIcon from '@mui/icons-material/ChatBubble'
+import Brightness7Icon from '@mui/icons-material/Brightness7'
+import { useRecoilState } from 'recoil'
+import { isDark } from '../../utils/atoms'
+import { darkTheme, defaultTheme } from '../../utils/theme'
 
 // STYLE
 const NavContainer = styled.div`
@@ -33,6 +37,7 @@ const NavContainer = styled.div`
         border: none;
         outline: none;
         background-color: transparent;
+        color: ${(props) => (props.dark ? darkTheme.textColor : defaultTheme.textColor)};
 
         &::placeholder {
           font-size: 12px;
@@ -52,6 +57,7 @@ const NavContainer = styled.div`
 
         .icon {
           font-size: 20px;
+          cursor: pointer;
         }
 
         img {
@@ -81,8 +87,13 @@ const NavContainer = styled.div`
 `
 
 const Navbar = () => {
+  const [dark, setDark] = useRecoilState(isDark)
+
+  const onDarkmode = () => {
+    setDark((prev) => !prev)
+  }
   return (
-    <NavContainer>
+    <NavContainer dark={dark}>
       <div className="wrapper">
         <div className="search">
           <input type="text" placeholder="search..." />
@@ -94,7 +105,11 @@ const Navbar = () => {
             English
           </div>
           <div className="item">
-            <DarkModeIcon className="icon" />
+            {dark ? (
+              <Brightness7Icon className="icon" onClick={onDarkmode} />
+            ) : (
+              <DarkModeIcon className="icon" onClick={onDarkmode} />
+            )}
           </div>
           <div className="item">
             <FullscreenExitIcon className="icon" />

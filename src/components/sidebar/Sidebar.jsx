@@ -13,12 +13,18 @@ import SettingsIcon from '@mui/icons-material/Settings'
 import AccountBoxIcon from '@mui/icons-material/AccountBox'
 import LogoutIcon from '@mui/icons-material/Logout'
 
+import { Link } from 'react-router-dom'
+import { useRecoilValue } from 'recoil'
+import { isDark } from '../../utils/atoms'
+import { darkTheme, defaultTheme } from '../../utils/theme'
+
 // STYLE
 const Container = styled.div`
   flex: 1;
   border-right: 0.5px solid #e9e6e6;
   min-height: 100vh;
-  background-color: #fff;
+  background-color: ${(props) =>
+    props.dark ? darkTheme.backgroundColor : defaultTheme.backgroundColor};
 
   hr {
     height: 0;
@@ -54,7 +60,7 @@ const Center = styled.div`
     cursor: pointer;
 
     &:hover {
-      background-color: #e8f3f0;
+      background-color: ${(props) => (props.dark ? darkTheme.textColor : '#55a38d3b')};
     }
 
     .icon {
@@ -93,28 +99,38 @@ const Bottom = styled.div`
 `
 
 const Sidebar = () => {
+  const dark = useRecoilValue(isDark)
+
   return (
-    <Container>
+    <Container dark={dark}>
       <Top>
-        <span className="logo">Admin Dashboard</span>
+        <Link to="/">
+          <span className="logo">Admin Dashboard</span>
+        </Link>
       </Top>
       <hr />
-      <Center>
+      <Center dark={dark}>
         <ul>
           <p className="title">MAIN</p>
-          <li>
-            <DashboardIcon className="icon" />
-            <span>Dashboard</span>
-          </li>
+          <Link to="/">
+            <li>
+              <DashboardIcon className="icon" />
+              <span>Dashboard</span>
+            </li>
+          </Link>
           <p className="title">Lists</p>
-          <li>
-            <PersonOutlineIcon className="icon" />
-            <span>Users</span>
-          </li>
-          <li>
-            <Inventory2Icon className="icon" />
-            <span>Products</span>
-          </li>
+          <Link to="/users">
+            <li>
+              <PersonOutlineIcon className="icon" />
+              <span>Users</span>
+            </li>
+          </Link>
+          <Link to="/products">
+            <li>
+              <Inventory2Icon className="icon" />
+              <span>Products</span>
+            </li>
+          </Link>
           <li>
             <CreditCardIcon className="icon" />
             <span>Orders</span>
